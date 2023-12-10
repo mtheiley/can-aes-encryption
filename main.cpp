@@ -1,39 +1,35 @@
 #include <iostream>
 #include "matrix.hpp"
 #include "aes.hpp"
+#include "key_schedule.hpp"
 
 int main() {
-    Matrix C ({
-        {0xd4, 0xe0, 0xb8, 0x1e},
-        {0xbf, 0xb4, 0x41, 0x27},
-        {0x5d, 0x52, 0x11, 0x98},
-        {0x30, 0xae, 0xf1, 0xe5}
+
+    Matrix key ({
+        {0xa0, 0x88, 0x23, 0x2a},
+        {0xfa, 0x54, 0xa3, 0x6c},
+        {0xfe, 0x2c, 0x39, 0x76},
+        {0x17, 0xb1, 0x39, 0x05}
     });
 
-    Matrix D ({
-        {0x19, 0xa0, 0x9a, 0xe9},
-        {0x3d, 0xf4, 0xc6, 0xf8},
-        {0xe3, 0xe2, 0x8d, 0x48},
-        {0xbe, 0x2b, 0x2a, 0x08}
+    Matrix<int, 4, 4> A;
+    
+    std::cout << A << std::endl;
+    A = Matrix({
+        {1, 0, 0, 0},
+        {0, 1, 0, 0},
+        {0, 0, 1, 0},
+        {0, 0, 0, 1}
     });
 
-    //std::cout << std::hex << D << std::endl;
+    std::cout << A << std::endl;
+    
+    auto lhs = A.column(0);
+    std::cout << lhs.at(0) << lhs.at(3) << std::endl;
 
-    //aes::encrypt::sub(D);
+    std::cout << "Size: " << lhs.size() << std::endl;
+    
+    std::cout << lhs << std::endl;
 
-    //std::cout << std::hex << D << std::endl;
-
-    Matrix X ({
-        {0xd4, 0xe0, 0xb8, 0x1e},
-        {0x27, 0xbf, 0xb4, 0x41},
-        {0x11, 0x98, 0x5d, 0x52},
-        {0xae, 0xf1, 0xe5, 0x30}
-    });
-
-    std::cout << std::hex << X << std::endl;
-    aes::encrypt::shift(X);
-    std::cout << std::hex << X << std::endl;
-
-    //auto row = X.row(1);
-    //std::cout << row << " " << row.rotLeft(1) << std::endl;
+    //KeySchedule<int, 10> keySchedule(key);
 }

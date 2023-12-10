@@ -22,11 +22,6 @@ std::array<T, M>::iterator MatrixProxy_<T, M>::end() {
 }
 
 template<typename T, size_t M>
-size_t MatrixProxy_<T, M>::size() {
-    return M;
-}
-
-template<typename T, size_t M>
 T& MatrixProxy_<T, M>::operator[](size_t i) {
     return cells[i];
 }
@@ -51,13 +46,28 @@ Matrix<T, N, M>::Matrix(T(&&init)[N][M]) {
 }
 
 template<typename T, size_t N, size_t M>
-ColumnIterator<T, N, M> Matrix<T, N, M>::column(size_t i) {
-    return ColumnIterator(*this, i);
+Matrix<T, N, M>& Matrix<T, N, M>::operator=(Matrix<T, N, M> other) {
+    //std::cout << "ASSIGN" << std::endl;
+    //for(size_t i = 0; i < N; i++) {
+        //rows[i] = MatrixProxy_<T,M>();
+    //    for(size_t j = 0; j < M; j++) {
+            //T tmp = other[i][j];
+            //std::cout << &tmp << std::endl;
+    //        (*this)[i][j] = 0;
+            //std::cout << &(*this)[i][j] << std::endl;
+    //    }
+    //}
+    return *this;
 }
 
 template<typename T, size_t N, size_t M>
-RowIterator<T, N, M> Matrix<T, N, M>::row(size_t i) {
-    return RowIterator(*this, i);
+ColumnIterator<T, Matrix<T, N, M>> Matrix<T, N, M>::column(size_t i) {
+    return ColumnIterator<T, Matrix<T, N, M>>(*this, i);
+}
+
+template<typename T, size_t N, size_t M>
+RowIterator<T, Matrix<T, N, M>> Matrix<T, N, M>::row(size_t i) {
+    return RowIterator<T, Matrix<T, N, M>>(*this, i);
 }
 
 template<typename T, size_t N, size_t M>
@@ -68,11 +78,6 @@ std::array<MatrixProxy_<T,M>, N>::iterator Matrix<T, N, M>::begin() {
 template<typename T, size_t N, size_t M>
 std::array<MatrixProxy_<T,M>, N>::iterator Matrix<T, N, M>::end() {
     return rows.end();
-}
-
-template<typename T, size_t N, size_t M>
-size_t Matrix<T, N, M>::size() {
-    return N;
 }
 
 template<typename T, size_t N, size_t M>

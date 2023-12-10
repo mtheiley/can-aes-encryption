@@ -2,50 +2,41 @@
 #define COLUMN_ITERATOR_H
 
 #include <iostream>
+#include "matrix_iterator_base.hpp"
 
-template<typename T, size_t N, size_t M>
-class Matrix;
-
-template<typename T, size_t N, size_t M>
-class ColumnIterator {
+template<typename T, typename M>
+class ColumnIterator : public MatrixIteratorBase<T, ColumnIterator<T, M>, M> {
 public:
     ColumnIterator();
-    ColumnIterator(Matrix<T, N, M>& mat, size_t col);
+    ColumnIterator(M& mat, size_t col);
 
-    ColumnIterator begin();
-    ColumnIterator end();
-    size_t size();
+    //size_t size();
 
-    ColumnIterator& operator+=(size_t i);
-    ColumnIterator& operator-=(size_t i);
-    ColumnIterator& operator++();
-    ColumnIterator operator++(int);
-    ColumnIterator operator+(size_t i);
-    ColumnIterator& operator--();
-    ColumnIterator operator--(int);
-    ColumnIterator operator-(size_t i);
+    T& at(size_t i);
     T& operator*();
-    T& operator[](size_t);
+    T& operator[](size_t i);
 
-    template<typename T_, size_t N_, size_t M_>
-    friend bool operator!=(ColumnIterator<T_, N_, M_> lhs, ColumnIterator<T_, N_, M_> rhs);
-    template<typename T_, size_t N_, size_t M_>
-    friend bool operator==(ColumnIterator<T_, N_, M_> lhs, ColumnIterator<T_, N_, M_> rhs);
+    template<typename T_, typename M_>
+    friend bool operator!=(ColumnIterator<T_, M_> lhs, ColumnIterator<T_, M_> rhs);
+    template<typename T_, typename M_>
+    friend bool operator==(ColumnIterator<T_, M_> lhs, ColumnIterator<T_, M_> rhs);
+
+protected:
+    static constexpr size_t size_ = M::size_N;
 
 private:
+    using MIB = MatrixIteratorBase<T, ColumnIterator<T, M>, M>;
     size_t col_ = 0;
-    size_t pos = 0;
-    Matrix<T, N, M>* matPtr;
 };
 
-template<typename T, size_t N, size_t M>
-std::ostream& operator<<(std::ostream& s, ColumnIterator<T, N, M> column);
+template<typename T, typename M>
+std::ostream& operator<<(std::ostream& s, ColumnIterator<T, M> column);
 
-template<typename T, size_t N, size_t M>
-bool operator==(ColumnIterator<T, N, M> lhs, ColumnIterator<T, N, M> rhs);
+template<typename T, typename M>
+bool operator==(ColumnIterator<T, M> lhs, ColumnIterator<T, M> rhs);
 
-template<typename T, size_t N, size_t M>
-bool operator!=(ColumnIterator<T, N, M> lhs, ColumnIterator<T, N, M> rhs);
+template<typename T, typename M>
+bool operator!=(ColumnIterator<T, M> lhs, ColumnIterator<T, M> rhs);
 
 #include "column_iterator.ipp"
 

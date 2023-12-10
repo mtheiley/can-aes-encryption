@@ -16,7 +16,7 @@ public:
 
     std::array<T, M>::iterator begin();
     std::array<T, M>::iterator end();
-    size_t size();
+    
     T& operator[](size_t i);
 
 private:
@@ -30,13 +30,17 @@ public:
     Matrix(Matrix<T, N, M>& other);
     explicit Matrix(T(&&init)[N][M]);
 
-    ColumnIterator<T, N, M> column(size_t i);
-    RowIterator<T, N, M> row(size_t i);
+    Matrix<T, N, M>& operator=(Matrix<T, N, M> other);
+
+    ColumnIterator<T, Matrix> column(size_t i);
+    RowIterator<T, Matrix> row(size_t i);
 
     std::array<MatrixProxy_<T,M>, N>::iterator begin();
     std::array<MatrixProxy_<T,M>, N>::iterator end();
-    size_t size();
+    //size_t size();
     std::pair<size_t, size_t> dim();
+    static constexpr size_t size_N = N;
+    static constexpr size_t size_M = M;
 
     MatrixProxy_<T, M>& operator[](size_t i);
     Matrix<T, N, M>& operator+=(Matrix<T, N, M>& other);
