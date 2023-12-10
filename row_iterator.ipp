@@ -79,8 +79,57 @@ RowIterator<T, N, M> RowIterator<T, N, M>::operator--(int) {
 }
 
 template<typename T, size_t N, size_t M>
+RowIterator<T, N, M>& RowIterator<T, N, M>::rotRight(size_t shift) {
+    auto elementOffset = [this](int start_, int shift_){
+        shift_ %= size();
+        int offset = start_ + shift_;
+        offset %= size();
+        return offset;
+    };
+    
+    std::array<T, M> copy;
+    for(int i = 0; i < M; i++) {
+        copy[i] = at(i);
+    }
+
+    for(int i = 0; i < M; i++) {
+        at(elementOffset(i, shift)) = copy[i];
+    }
+
+    return *this;
+}
+
+template<typename T, size_t N, size_t M>
+RowIterator<T, N, M>& RowIterator<T, N, M>::rotLeft(size_t shift) {
+    auto elementOffset = [this](int start_, int shift_){
+        shift_ %= size();
+        int offset = start_ - shift_;
+        if(offset < 0) {
+            offset += (int) size();
+        }
+        return offset;
+    };
+    
+    std::array<T, M> copy;
+    for(int i = 0; i < M; i++) {
+        copy[i] = at(i);
+    }
+
+    for(int i = 0; i < M; i++) {
+        at(elementOffset(i, shift)) = copy[i];
+    }
+
+    return *this;
+}
+
+template<typename T, size_t N, size_t M>
 T& RowIterator<T, N, M>::operator*() {
     return (*matPtr)[row_][pos];
+}
+
+template<typename T, size_t N, size_t M>
+T& RowIterator<T, N, M>::at(size_t i) {
+    return (*matPtr)[row_][pos + i];
 }
 
 template<typename T, size_t N, size_t M>

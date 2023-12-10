@@ -24,9 +24,12 @@ public:
     RowIterator& operator--();
     RowIterator operator--(int);
     RowIterator operator-(size_t i);
+    RowIterator& rotRight(size_t shift);
+    RowIterator& rotLeft(size_t shift);
     
     T& operator*();
-    T& operator[](size_t);
+    T& at(size_t i);
+    T& operator[](size_t i);
 
     template<typename T_, size_t N_, size_t M_>
     friend bool operator!=(RowIterator<T_, N_, M_> lhs, RowIterator<T_, N_, M_> rhs);

@@ -17,9 +17,23 @@ int main() {
         {0xbe, 0x2b, 0x2a, 0x08}
     });
 
-    std::cout << std::hex << D << std::endl;
+    //std::cout << std::hex << D << std::endl;
 
-    aes::encrypt::sub(D);
+    //aes::encrypt::sub(D);
 
-    std::cout << std::hex << D << std::endl;
+    //std::cout << std::hex << D << std::endl;
+
+    Matrix X ({
+        {0xd4, 0xe0, 0xb8, 0x1e},
+        {0x27, 0xbf, 0xb4, 0x41},
+        {0x11, 0x98, 0x5d, 0x52},
+        {0xae, 0xf1, 0xe5, 0x30}
+    });
+
+    std::cout << std::hex << X << std::endl;
+    aes::encrypt::shift(X);
+    std::cout << std::hex << X << std::endl;
+
+    //auto row = X.row(1);
+    //std::cout << row << " " << row.rotLeft(1) << std::endl;
 }

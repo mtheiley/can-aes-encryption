@@ -1,6 +1,8 @@
 #ifndef GALOIS_TABLE_H
 #define GALOIS_TABLE_H
 
+#include <cstdint>
+
 struct GaloisTable {
     static uint8_t gfield2(uint8_t value);
     static uint8_t gfield3(uint8_t value);

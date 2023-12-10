@@ -9,6 +9,9 @@ namespace aes::encrypt {
 
     template<typename T>
     void sub(Matrix<T, 4, 4>& mat);
+
+    template<typename T>
+    void shift(Matrix<T, 4, 4>& mat);
 }
 
 #include "aes.ipp"

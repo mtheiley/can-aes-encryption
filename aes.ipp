@@ -28,3 +28,10 @@ void aes::encrypt::sub(Matrix<T, 4, 4>& mat) {
         }
     }
 }
+
+template<typename T>
+void aes::encrypt::shift(Matrix<T, 4, 4>& mat) {
+    mat.row(1).rotLeft(1);
+    mat.row(2).rotLeft(2);
+    mat.row(3).rotLeft(3);
+}
