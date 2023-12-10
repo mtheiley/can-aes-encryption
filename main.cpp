@@ -12,8 +12,24 @@ int main() {
         {0x16, 0xa6, 0x88, 0x3c}
     });
 
+    Matrix A ({
+        {0xde, 0xad, 0xbe, 0xef},
+        {0xbe, 0xd0, 0x00, 0x00},
+        {0xca, 0xfe, 0xba, 0xbe},
+        {0x11, 0x11, 0x11, 0x11}
+    });
+
     KeySchedule<int, 10> keySchedule(key);
-    for(int i = 0; i <= 10; i++) {
-        std::cout << std::hex << keySchedule.getKey(i) << std::endl;
-    }
+
+    aes::addRoundKey(A, keySchedule.getKey(0));
+    aes::encrypt::subBytes(A);
+    aes::encrypt::shiftRows(A);
+    aes::encrypt::mixColumns(A);
+    std::cout << std::hex << A << std::endl;
+
+    aes::decrypt::mixColumns(A);
+    aes::decrypt::shiftRows(A);
+    aes::decrypt::subBytes(A);
+    aes::addRoundKey(A, keySchedule.getKey(0));
+    std::cout << std::hex << A << std::endl;
 }
