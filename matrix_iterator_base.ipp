@@ -125,3 +125,12 @@ V& MatrixIteratorBase<T, V, M>::rotLeft(size_t shift) {
 
     return *static_cast<V*>(this);
 }
+
+template<typename T, typename V, typename M>
+V& MatrixIteratorBase<T, V, M>::assign(V other) {
+    for(int i = 0; i < size(); i++) {
+        T tmp = other.at(i);
+        at(i) = tmp;
+    }
+    return *static_cast<V*>(this);
+}

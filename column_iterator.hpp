@@ -10,11 +10,12 @@ public:
     ColumnIterator();
     ColumnIterator(M& mat, size_t col);
 
-    //size_t size();
+    constexpr static size_t size() {return size_;}
 
     T& at(size_t i);
     T& operator*();
     T& operator[](size_t i);
+    ColumnIterator& operator=(ColumnIterator& other) {return MIB::assign(other);}
 
     template<typename T_, typename M_>
     friend bool operator!=(ColumnIterator<T_, M_> lhs, ColumnIterator<T_, M_> rhs);

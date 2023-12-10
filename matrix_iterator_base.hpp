@@ -29,9 +29,10 @@ public:
     virtual T& at(size_t i) {return dummy;}
     virtual T& operator*() {return dummy;}
     virtual T& operator[](size_t i) {return dummy;}
+    virtual V& assign(V other);
 
 protected:
-    constexpr static size_t size_ = 0;
+    constexpr static size_t size_ = V::size();
     size_t pos = 0;
     M* matPtr;
     T dummy = T(0);

@@ -47,16 +47,13 @@ Matrix<T, N, M>::Matrix(T(&&init)[N][M]) {
 
 template<typename T, size_t N, size_t M>
 Matrix<T, N, M>& Matrix<T, N, M>::operator=(Matrix<T, N, M> other) {
-    //std::cout << "ASSIGN" << std::endl;
-    //for(size_t i = 0; i < N; i++) {
-        //rows[i] = MatrixProxy_<T,M>();
-    //    for(size_t j = 0; j < M; j++) {
-            //T tmp = other[i][j];
-            //std::cout << &tmp << std::endl;
-    //        (*this)[i][j] = 0;
-            //std::cout << &(*this)[i][j] << std::endl;
-    //    }
-    //}
+    for(size_t i = 0; i < N; i++) {
+        rows[i] = MatrixProxy_<T,M>();
+        for(size_t j = 0; j < M; j++) {
+            T tmp = other[i][j];
+            (*this)[i][j] = tmp;
+        }
+    }
     return *this;
 }
 

@@ -6,30 +6,14 @@
 int main() {
 
     Matrix key ({
-        {0xa0, 0x88, 0x23, 0x2a},
-        {0xfa, 0x54, 0xa3, 0x6c},
-        {0xfe, 0x2c, 0x39, 0x76},
-        {0x17, 0xb1, 0x39, 0x05}
+        {0x2b, 0x28, 0xab, 0x09},
+        {0x7e, 0xae, 0xf7, 0xcf},
+        {0x15, 0xd2, 0x15, 0x4f},
+        {0x16, 0xa6, 0x88, 0x3c}
     });
 
-    Matrix<int, 4, 4> A;
-    
-    std::cout << A << std::endl;
-    A = Matrix({
-        {1, 0, 0, 0},
-        {0, 1, 0, 0},
-        {0, 0, 1, 0},
-        {0, 0, 0, 1}
-    });
-
-    std::cout << A << std::endl;
-    
-    auto lhs = A.column(0);
-    std::cout << lhs.at(0) << lhs.at(3) << std::endl;
-
-    std::cout << "Size: " << lhs.size() << std::endl;
-    
-    std::cout << lhs << std::endl;
-
-    //KeySchedule<int, 10> keySchedule(key);
+    KeySchedule<int, 10> keySchedule(key);
+    for(int i = 0; i <= 10; i++) {
+        std::cout << std::hex << keySchedule.getKey(i) << std::endl;
+    }
 }

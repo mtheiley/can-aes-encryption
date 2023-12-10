@@ -10,10 +10,13 @@ class KeySchedule {
 public:
     KeySchedule() {};
     KeySchedule(Matrix<T, 4, 4> initKey) {
-
-        for(size_t i = 1; i < N-1; i++) {
+        keys[0] = initKey;
+        for(size_t i = 1; i <= N; i++) {
             generateKey(i);
         }
+    }
+    Matrix<T, 4, 4>& getKey(size_t i) {
+        return keys[i];
     }
     
 private:
@@ -48,42 +51,34 @@ private:
         auto& lmat = keys[i-1];
         auto& rmat = keys[i];
 
-        std::cout << lmat << " " << rmat << std::endl;
-        auto lhs = lmat.column(0);
-        auto rhs = lmat.row(0);
-        std::cout << lhs << " " << rhs << std::endl;
+        auto lhs1 = lmat.column(0);
+        auto lhs2 = lmat.column(1);
+        auto lhs3 = lmat.column(2);
+        auto lhs4 = lmat.column(3);
 
-
-        //auto lhs1 = lmat.column(0);
-        //auto lhs2 = lmat.column(1);
-        //auto lhs3 = lmat.column(2);
-        //auto lhs4 = lmat.column(3);
-
-        //std::cout << lhs1 << std::endl;
-
-        //auto rhs1 = rmat.column(0);
-        //auto rhs2 = rmat.column(1);
-        //auto rhs3 = rmat.column(2);
-        //auto rhs4 = rmat.column(3);
-
-        //std::cout << lhs1 << std::endl;
-        return;
+        auto rhs1 = rmat.column(0);
+        auto rhs2 = rmat.column(1);
+        auto rhs3 = rmat.column(2);
+        auto rhs4 = rmat.column(3);
 
         //First Row
-        //rhs1 = lhs4;
-        //std::cout << rhs1 << std::endl;
-        //rhs1.rotLeft(1);
-        //std::cout << rhs1 << std::endl;
-        //for(int j = 0; j < rhs1.size(); j++) {
-        //    rhs1[j] = SubBox::encrypt(rhs1[j]);
-        //}
-        //std::cout << rhs1 << std::endl;
-        //rhs1 ^= lhs1;
-        //rhs1[0] ^= rcon(i);
-        //std::cout << rhs1 << std::endl;
+        rhs1 = lhs4;
+        rhs1.rotLeft(1);
+        for(int j = 0; j < rhs1.size(); j++) {
+           rhs1[j] = SubBox::encrypt(rhs1[j]);
+        }
+        rhs1 ^= lhs1;
+        rhs1[0] ^= rcon(i);
 
+        //Others
+        rhs2 = rhs1;
+        rhs2 ^= lhs2;
+        rhs3 = rhs2;
+        rhs3 ^= lhs3;
+        rhs4 = rhs3;
+        rhs4 ^= lhs4;
     }
-    std::array<Matrix<T, 4, 4>, N> keys;
+    std::array<Matrix<T, 4, 4>, N+1> keys;
 };
 
 #endif //KEY_SCHEDULE
