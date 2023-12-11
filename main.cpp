@@ -1,4 +1,5 @@
 #include <iostream>
+#include <array>
 #include "matrix.hpp"
 #include "aes.hpp"
 #include "key_schedule.hpp"
@@ -19,9 +20,14 @@ int main() {
         {0x11, 0x11, 0x11, 0x11}
     });
 
-    KeySchedule<int, 10> keySchedule(key);
+    std::array<Matrix<int,4,4>, 11> roundKeys;
+    roundKeys[0] = key;
 
-    aes::addRoundKey(A, keySchedule.getKey(0));
+    for(int i = 1; i <= 10; i++) {
+        roundKeys[i] = key_schedule::genRoundKey(roundKeys[i-1], i);
+    }
+
+    aes::addRoundKey(A, roundKeys[0]);
     aes::encrypt::subBytes(A);
     aes::encrypt::shiftRows(A);
     aes::encrypt::mixColumns(A);
@@ -30,6 +36,6 @@ int main() {
     aes::decrypt::mixColumns(A);
     aes::decrypt::shiftRows(A);
     aes::decrypt::subBytes(A);
-    aes::addRoundKey(A, keySchedule.getKey(0));
+    aes::addRoundKey(A, roundKeys[0]);
     std::cout << std::hex << A << std::endl;
 }

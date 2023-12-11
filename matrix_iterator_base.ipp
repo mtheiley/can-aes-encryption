@@ -73,16 +73,6 @@ V& MatrixIteratorBase<T, V, M>::operator^=(V& other) {
 }
 
 template<typename T, typename V, typename M>
-V MatrixIteratorBase<T, V, M>::operator^(V& other) {
-    V tmp = *static_cast<V*>(this);
-    
-    for(int i = 0; i < size(); i++) {
-        tmp.at(i) ^= other.at(i);
-    }
-    return tmp;
-}
-
-template<typename T, typename V, typename M>
 V& MatrixIteratorBase<T, V, M>::rotRight(size_t shift) {
     auto elementOffset = [this](int start_, int shift_){
         shift_ %= size();
@@ -127,7 +117,7 @@ V& MatrixIteratorBase<T, V, M>::rotLeft(size_t shift) {
 }
 
 template<typename T, typename V, typename M>
-V& MatrixIteratorBase<T, V, M>::assign(V other) {
+V& MatrixIteratorBase<T, V, M>::copy(V other) {
     for(int i = 0; i < size(); i++) {
         T tmp = other.at(i);
         at(i) = tmp;

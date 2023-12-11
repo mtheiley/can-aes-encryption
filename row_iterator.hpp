@@ -15,7 +15,6 @@ public:
     T& at(size_t i);
     T& operator*();
     T& operator[](size_t i);
-    RowIterator& operator=(RowIterator& other) {return MIB::assign(other);}
 
     template<typename T_, typename M_>
     friend bool operator!=(RowIterator<T_, M_> lhs, RowIterator<T_, M_> rhs);

@@ -22,14 +22,13 @@ public:
     virtual V operator--(int);
     virtual V operator-(size_t i);
     virtual V& operator^= (V& other);
-    virtual V operator^(V& other);
     virtual V& rotRight(size_t shift);
     virtual V& rotLeft(size_t shift);
 
     virtual T& at(size_t i) {return dummy;}
     virtual T& operator*() {return dummy;}
     virtual T& operator[](size_t i) {return dummy;}
-    virtual V& assign(V other);
+    virtual V& copy(V other);
 
 protected:
     constexpr static size_t size_ = V::size();
