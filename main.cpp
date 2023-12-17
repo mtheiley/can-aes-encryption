@@ -3,7 +3,7 @@
 #include "matrix.hpp"
 #include "aes.hpp"
 #include "key_schedule.hpp"
-#include "matrix_iterator_prototype.hpp"
+#include "matrix_iterator.hpp"
 
 int main() {
 
@@ -21,9 +21,9 @@ int main() {
         {0x11, 0x11, 0x11, 0x11}
     });
 
-    matrix::Slice_Prototype col = matrix::Slice_Prototype(&A, {0, 1}, {4, 1}, matrix::columnIncrementor);
-    matrix::Slice_Prototype row = matrix::Slice_Prototype(&A, {2, 0}, {2, 4}, matrix::rowIncrementor);
-    matrix::Slice_Prototype diag = matrix::Slice_Prototype(&A, {0, 0}, {4, 4}, [](matrix::Point p, size_t amount) -> matrix::Point{
+    matrix::Slice col = matrix::Slice(&A, {0, 1}, {4, 1}, matrix::columnIncrementor);
+    matrix::Slice row = matrix::Slice(&A, {2, 0}, {2, 4}, matrix::rowIncrementor);
+    matrix::Slice diag = matrix::Slice(&A, {0, 0}, {4, 4}, [](matrix::Point p, size_t amount) -> matrix::Point{
         return {p.first + amount, p.second + amount};
     });
     
