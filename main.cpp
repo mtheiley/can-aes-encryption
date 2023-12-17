@@ -3,6 +3,7 @@
 #include "matrix.hpp"
 #include "aes.hpp"
 #include "key_schedule.hpp"
+#include "matrix_iterator_prototype.hpp"
 
 int main() {
 
@@ -20,22 +21,36 @@ int main() {
         {0x11, 0x11, 0x11, 0x11}
     });
 
-    std::array<Matrix<int,4,4>, 11> roundKeys;
-    roundKeys[0] = key;
+    matrix::Slice_Prototype col = matrix::Slice_Prototype(&A, {0, 1}, {4, 1}, matrix::columnIncrementor);
+    matrix::Slice_Prototype row = matrix::Slice_Prototype(&A, {2, 0}, {2, 4}, matrix::rowIncrementor);
+    matrix::Slice_Prototype diag = matrix::Slice_Prototype(&A, {0, 0}, {4, 4}, [](matrix::Point p, size_t amount) -> matrix::Point{
+        return {p.first + amount, p.second + amount};
+    });
+    
+    //for(auto e : col) {
+    //    std::cout << std::hex << e << std::endl;
+    //}
 
-    for(int i = 1; i <= 10; i++) {
-        roundKeys[i] = key_schedule::genRoundKey(roundKeys[i-1], i);
-    }
+    std::cout << std::hex << col << " " << row << " " << diag << std::endl;
 
-    aes::addRoundKey(A, roundKeys[0]);
-    aes::encrypt::subBytes(A);
-    aes::encrypt::shiftRows(A);
-    aes::encrypt::mixColumns(A);
-    std::cout << std::hex << A << std::endl;
+    std::cout << std::hex << col[1] << " " << row[1] << std::endl;
 
-    aes::decrypt::mixColumns(A);
-    aes::decrypt::shiftRows(A);
-    aes::decrypt::subBytes(A);
-    aes::addRoundKey(A, roundKeys[0]);
-    std::cout << std::hex << A << std::endl;
+    // std::array<Matrix<int,4,4>, 11> roundKeys;
+    // roundKeys[0] = key;
+
+    // for(int i = 1; i <= 10; i++) {
+    //     roundKeys[i] = key_schedule::genRoundKey(roundKeys[i-1], i);
+    // }
+
+    // aes::addRoundKey(A, roundKeys[0]);
+    // aes::encrypt::subBytes(A);
+    // aes::encrypt::shiftRows(A);
+    // aes::encrypt::mixColumns(A);
+    // std::cout << std::hex << A << std::endl;
+
+    // aes::decrypt::mixColumns(A);
+    // aes::decrypt::shiftRows(A);
+    // aes::decrypt::subBytes(A);
+    // aes::addRoundKey(A, roundKeys[0]);
+    // std::cout << std::hex << A << std::endl;
 }
