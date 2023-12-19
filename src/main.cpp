@@ -23,6 +23,9 @@
 // }
 
 int main() {
+    int* ptr = new int(3);
+    delete ptr;
+
     matrix::Matrix key ({
         {0x2b, 0x28, 0xab, 0x09},
         {0x7e, 0xae, 0xf7, 0xcf},
