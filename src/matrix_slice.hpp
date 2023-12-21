@@ -1,5 +1,5 @@
-#ifndef MATRIX_ITERATOR_PROTOTYPE
-#define MATRIX_ITERATOR_PROTOTYPE
+#ifndef MATRIX_SLICE
+#define MATRIX_SLICE
 
 #include <iostream>
 #include <numeric>
@@ -26,8 +26,8 @@ bool operator!=(I&& lhs, J&& rhs);
 namespace matrix {
     using Point = std::pair<size_t, size_t>;
 
-    Point columnIncrementor = {1, 0};
-    Point rowIncrementor = {0, 1};
+    static Point columnIncrementor = {1, 0};
+    static Point rowIncrementor = {0, 1};
 
     template<typename M>
     class Slice {
@@ -88,4 +88,4 @@ namespace matrix {
 
 #include "matrix_slice.ipp"
 
-#endif //MATRIX_ITERATOR_PROTOTYPE
+#endif //MATRIX_SLICE

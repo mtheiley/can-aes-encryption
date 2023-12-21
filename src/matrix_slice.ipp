@@ -110,8 +110,8 @@ namespace matrix {
 
     template<typename M>
     Slice<M>& Slice<M>::operator^=(Slice& other) {
-        Iterator<M> left = Iterator(this, start, inc);
-        Iterator<M> right = Iterator(&other, other.start, other.inc);
+        Iterator<M> left = Iterator(*this, start, inc);
+        Iterator<M> right = Iterator(other, other.start, other.inc);
 
         while(left != end() && right != other.end()) {
             *left ^= *right;
@@ -159,8 +159,8 @@ namespace matrix {
 
     template<typename M>
     Slice<M>& Slice<M>::copy(Slice<M>& other) {
-        Iterator<M> left = Iterator(this, start, inc);
-        Iterator<M> right = Iterator(&other, other.start, other.inc);
+        Iterator<M> left = Iterator<M>(*this, start, inc);
+        Iterator<M> right = Iterator<M>(other, other.start, other.inc);
 
         while(left != end() && right != other.end()) {
             *left = *right;

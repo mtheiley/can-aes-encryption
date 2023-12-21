@@ -13,6 +13,7 @@ add_subdirectory(packages/googletest)
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
 add_library(can_aes_lib
+    src/aes128.cpp
     src/galoistable.cpp
     src/sub_box.cpp
 )

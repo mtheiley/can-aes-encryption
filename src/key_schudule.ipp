@@ -35,7 +35,7 @@ matrix::Matrix<T, N, M> key_schedule::genRoundKey(matrix::Matrix<T, N, M>& prev,
     auto lhs1 = prev.column(0);
     auto lhsLast = prev.column(M - 1);
     rhs1.copy(lhsLast);
-    rhs1.rotLeft(1);
+    rhs1 << 1;
     for(int j = 0; j < rhs1.size(); j++) {
         rhs1[j] = SubBox::encrypt(rhs1[j]);
     }
