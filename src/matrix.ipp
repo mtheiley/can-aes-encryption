@@ -60,12 +60,12 @@ namespace matrix {
 
     template<typename T, size_t N, size_t M>
     auto Matrix<T, N, M>::column(size_t i) {
-        return Slice(this, {0, i}, {N, i}, columnIncrementor);
+        return Slice(*this, {0, i}, {N, i}, columnIncrementor);
     }
 
     template<typename T, size_t N, size_t M>
     auto Matrix<T, N, M>::row(size_t i) {
-        return Slice(this, {i, 0}, {i, M}, rowIncrementor);
+        return Slice(*this, {i, 0}, {i, M}, rowIncrementor);
     }
 
     template<typename T, size_t N, size_t M>

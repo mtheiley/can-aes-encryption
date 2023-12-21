@@ -44,6 +44,8 @@ namespace matrix {
         Matrix<T, N, M>& operator+=(Matrix<T, N, M>& other);
         Matrix<T, N, M>& operator-=(Matrix<T, N, M>& other);
 
+        static constexpr T type = 0;
+
     private:
         std::array<MatrixProxy_<T, M>, N> rows;
     };

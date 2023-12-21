@@ -5,29 +5,29 @@
 
 namespace aes {
     template<typename T>
-    void addRoundKey(Matrix<T, 4, 4>& mat, Matrix<T, 4, 4>& roundKey);
+    void addRoundKey(matrix::Matrix<T, 4, 4>& mat, matrix::Matrix<T, 4, 4>& roundKey);
 }
 
 namespace aes::encrypt {
     template<typename T>
-    void mixColumns(Matrix<T, 4, 4>& mat);
+    void mixColumns(matrix::Matrix<T, 4, 4>& mat);
 
     template<typename T>
-    void subBytes(Matrix<T, 4, 4>& mat);
+    void subBytes(matrix::Matrix<T, 4, 4>& mat);
 
     template<typename T>
-    void shiftRows(Matrix<T, 4, 4>& mat);
+    void shiftRows(matrix::Matrix<T, 4, 4>& mat);
 }
 
 namespace aes::decrypt {
     template<typename T>
-    void mixColumns(Matrix<T, 4, 4>& mat);
+    void mixColumns(matrix::Matrix<T, 4, 4>& mat);
 
     template<typename T>
-    void subBytes(Matrix<T, 4, 4>& mat);
+    void subBytes(matrix::Matrix<T, 4, 4>& mat);
 
     template<typename T>
-    void shiftRows(Matrix<T, 4, 4>& mat);
+    void shiftRows(matrix::Matrix<T, 4, 4>& mat);
 }
 
 #include "aes.ipp"

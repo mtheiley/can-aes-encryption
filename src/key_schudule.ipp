@@ -27,8 +27,8 @@ T key_schedule::rcon(size_t i) {
 }
 
 template<typename T, size_t N, size_t M>
-Matrix<T, N, M> key_schedule::genRoundKey(Matrix<T, N, M>& prev, size_t roundNumber) {
-    Matrix<T, N, M> key;
+matrix::Matrix<T, N, M> key_schedule::genRoundKey(matrix::Matrix<T, N, M>& prev, size_t roundNumber) {
+    matrix::Matrix<T, N, M> key;
 
     //First Row
     auto rhs1 = key.column(0);

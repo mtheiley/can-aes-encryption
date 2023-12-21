@@ -7,7 +7,7 @@
 
 struct key_schedule {
     template<typename T, size_t N, size_t M>
-    static Matrix<T, N, M> genRoundKey(Matrix<T, N, M>& prev, size_t roundNumber);
+    static matrix::Matrix<T, N, M> genRoundKey(matrix::Matrix<T, N, M>& prev, size_t roundNumber);
 
 private:
     template<typename T>

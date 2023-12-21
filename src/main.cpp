@@ -1,26 +1,10 @@
 #include <iostream>
 #include <array>
 #include "matrix.hpp"
-//#include "aes.hpp"
-//#include "key_schedule.hpp"
+#include "aes.hpp"
+#include "key_schedule.hpp"
 #include "matrix_slice.hpp"
 #include <vector>
-
-// template <typename M, typename F>
-// struct Iterator {
-//     M dummy1 = 0;
-//     F dummy2 = 1;
-// };
-
-// template<typename I>
-// concept iterable = requires(I i) {
-//     []<typename M, typename F>(Iterator<M, F>){}(i);
-// };
-
-// template<iterable I>
-// void foo(I&& bar) {
-//     //std::cout << bar.dummy1 << " " << bar.dummy2 << std::endl;
-// }
 
 int main() {
     int* ptr = new int(3);
@@ -40,18 +24,11 @@ int main() {
         {0x11, 0x11, 0x11, 0x11}
     });
 
-    auto row1 = key.row(0);
-    auto row2 = A.row(2);
-
-    std::cout << std::hex << row1 << " " << row2 << std::endl;
-
-    std::cout << std::hex << row1 << std::endl;
-    row1.copy(row2);
-
-    std::cout << std::hex << row1 << std::endl;
-    row1 = row2;
-
-    std::cout << std::hex << row1 << std::endl;
+    auto row = A.row(2);
+    std::cout << std::hex << row << std::endl;
+    row << 2;
+    row >> 2;
+    std::cout << std::hex << row << std::endl;
 
     //std::array<matrix::Matrix<int,4,4>, 11> roundKeys;
     //roundKeys[0] = key;

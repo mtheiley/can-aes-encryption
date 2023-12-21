@@ -2,7 +2,7 @@
 #include "sub_box.hpp"
 
 template<typename T>
-void aes::addRoundKey(Matrix<T, 4, 4>& mat, Matrix<T, 4, 4>& roundKey) {
+void aes::addRoundKey(matrix::Matrix<T, 4, 4>& mat, matrix::Matrix<T, 4, 4>& roundKey) {
     
     for(int i = 0; i < mat.dim().second; i++) {
         auto lhs = mat.column(i);
@@ -15,7 +15,7 @@ void aes::addRoundKey(Matrix<T, 4, 4>& mat, Matrix<T, 4, 4>& roundKey) {
 }
 
 template<typename T>
-void aes::encrypt::mixColumns(Matrix<T, 4, 4>& mat) {
+void aes::encrypt::mixColumns(matrix::Matrix<T, 4, 4>& mat) {
     using GT = GaloisTable;
     for(int i = 0; i < mat.dim().second; i++)
     {
@@ -34,7 +34,7 @@ void aes::encrypt::mixColumns(Matrix<T, 4, 4>& mat) {
 }
 
 template<typename T>
-void aes::encrypt::subBytes(Matrix<T, 4, 4>& mat) {
+void aes::encrypt::subBytes(matrix::Matrix<T, 4, 4>& mat) {
     for(auto& row : mat) {
         for(auto& e : row) {
             e = SubBox::encrypt(e);
@@ -43,14 +43,14 @@ void aes::encrypt::subBytes(Matrix<T, 4, 4>& mat) {
 }
 
 template<typename T>
-void aes::encrypt::shiftRows(Matrix<T, 4, 4>& mat) {
+void aes::encrypt::shiftRows(matrix::Matrix<T, 4, 4>& mat) {
     mat.row(1).rotRight(1);
     mat.row(2).rotRight(2);
     mat.row(3).rotRight(3);
 }
 
 template<typename T>
-void aes::decrypt::mixColumns(Matrix<T, 4, 4>& mat) {
+void aes::decrypt::mixColumns(matrix::Matrix<T, 4, 4>& mat) {
     using GT = GaloisTable;
     for(int i = 0; i < mat.dim().second; i++)
     {
@@ -69,7 +69,7 @@ void aes::decrypt::mixColumns(Matrix<T, 4, 4>& mat) {
 }
 
 template<typename T>
-void aes::decrypt::subBytes(Matrix<T, 4, 4>& mat) {
+void aes::decrypt::subBytes(matrix::Matrix<T, 4, 4>& mat) {
     for(auto& row : mat) {
         for(auto& e : row) {
             e = SubBox::decrypt(e);
@@ -78,7 +78,7 @@ void aes::decrypt::subBytes(Matrix<T, 4, 4>& mat) {
 }
 
 template<typename T>
-void aes::decrypt::shiftRows(Matrix<T, 4, 4>& mat) {
+void aes::decrypt::shiftRows(matrix::Matrix<T, 4, 4>& mat) {
     mat.row(1).rotLeft(1);
     mat.row(2).rotLeft(2);
     mat.row(3).rotLeft(3);
