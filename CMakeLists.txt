@@ -15,19 +15,28 @@ include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 add_library(can_aes_lib
     src/can_mat_adapter.cpp
     src/can_network.cpp
+    src/encrypt_network.cpp
     src/galoistable.cpp
     src/sub_box.cpp
 )
 
-add_executable(can_aes
-    src/main.cpp
+add_executable(can_encrypt
+    src/encrypt_entrypoint.cpp
+)
+
+add_executable(can_decrypt
+    src/decrypt_entrypoint.cpp
 )
 
 add_executable(unit_test
     test/example_test.cpp
 )
 
-target_link_libraries(can_aes
+target_link_libraries(can_encrypt
+    can_aes_lib
+)
+
+target_link_libraries(can_decrypt
     can_aes_lib
 )
 
