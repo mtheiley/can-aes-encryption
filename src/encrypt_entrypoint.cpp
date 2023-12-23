@@ -38,14 +38,5 @@ int main() {
         aes128.encrypt(data);
 
         enOut.send(data);
-
-        //std::cout << data << std::endl;
-        //aes128.decrypt(data);
-        //std::cout << data << std::endl;
-
-        //can_frame output = can_mat_adapter::matToCan(data);
-        //std::cout << std::hex << output.can_id << "[" << (int) output.can_dlc << "] "; 
-	    //for (int i = 0; i < output.can_dlc; i++) std::cout << (int) output.data[i] << " ";
-	    //std::cout << std::endl;
     }
 }
