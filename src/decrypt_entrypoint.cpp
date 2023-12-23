@@ -5,9 +5,15 @@
 #include "can_network.hpp"
 #include "can_mat_adapter.hpp"
 #include "encrypt_network.hpp"
+#include "config.hpp"
 
 int main() {
     
+    Config& config = Config::getConfig();
+    std::cout << "CAN dest: " << config.canDest() << std::endl;
+    std::cout << "Encrypt port: " << config.encryptPort() << std::endl;
+    std::cout << "Encrypt host: " << config.encryptHost() << std::endl;
+
     matrix::Matrix<uint8_t, 4, 4> key ({
         {0x2b, 0x28, 0xab, 0x09},
         {0x7e, 0xae, 0xf7, 0xcf},
@@ -17,8 +23,8 @@ int main() {
 
     AES128 aes128(key);
 
-    CanNetwork canOut("vcan1");
-    EncryptNetwork enIn("192.168.1.13", 2115);
+    CanNetwork canOut(config.canDest());
+    EncryptNetwork enIn(config.encryptHost(), config.encryptPort());
     enIn.listen();
     
     while(true) {

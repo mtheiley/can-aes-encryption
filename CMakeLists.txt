@@ -10,9 +10,12 @@ set(CMAKE_CXX_STANDARD 20)
 
 # Add googletest package
 add_subdirectory(packages/googletest)
+add_subdirectory(packages/yaml-cpp)
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
+include_directories(packages/yaml-cpp/include)
 
 add_library(can_aes_lib
+    src/config.cpp
     src/can_mat_adapter.cpp
     src/can_network.cpp
     src/encrypt_network.cpp
@@ -34,10 +37,12 @@ add_executable(unit_test
 
 target_link_libraries(can_encrypt
     can_aes_lib
+    yaml-cpp
 )
 
 target_link_libraries(can_decrypt
     can_aes_lib
+    yaml-cpp
 )
 
 target_link_libraries(unit_test
@@ -59,4 +64,5 @@ add_custom_target(get_packages
     COMMAND echo "Getting Packages..."
     COMMAND mkdir ../packages || (exit 0)
     COMMAND git clone https://github.com/google/googletest/ ../packages/googletest || (exit 0)
+    COMMAND git clone https://github.com/jbeder/yaml-cpp.git ../packages/yaml-cpp || (exit 0)
 )
