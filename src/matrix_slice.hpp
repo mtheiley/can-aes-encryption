@@ -47,12 +47,13 @@ namespace matrix {
         size_t size();
 
     private:
+        size_t init_size_calculation();
+
         M& matRef;
         Point start = {0, 0};
         Point end_ = {0, 0};
         Point inc = {0, 0};
 
-        bool size_cached = false; //avoid having to recalculate
         size_t size_;
     };
 

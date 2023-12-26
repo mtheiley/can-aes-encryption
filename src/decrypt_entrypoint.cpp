@@ -1,11 +1,15 @@
 #include <iostream>
 #include <cstdint>
+#include <chrono>
+
 #include "matrix.hpp"
 #include "aes128.hpp"
 #include "can_network.hpp"
 #include "can_mat_adapter.hpp"
 #include "encrypt_network.hpp"
 #include "config.hpp"
+
+using namespace std::chrono;
 
 int main() {
     
@@ -28,16 +32,21 @@ int main() {
     enIn.listen();
     
     while(true) {
+        steady_clock::time_point begin = steady_clock::now();
+
         matrix::Matrix<uint8_t, 4, 4> data = enIn.read();
-        std::cout << data << std::endl;
+        //std::cout << data << std::endl;
         aes128.decrypt(data);
-        std::cout << data << std::endl;
+        //std::cout << data << std::endl;
 
         can_frame output = can_mat_adapter::matToCan(data);
-        std::cout << std::hex << output.can_id << "[" << (int) output.can_dlc << "] "; 
-	    for (int i = 0; i < output.can_dlc; i++) std::cout << (int) output.data[i] << " ";
-	    std::cout << std::endl;
+        //std::cout << std::hex << output.can_id << "[" << (int) output.can_dlc << "] "; 
+	    //for (int i = 0; i < output.can_dlc; i++) std::cout << (int) output.data[i] << " ";
+	    //std::cout << std::endl;
 
         canOut.send(output);
+        steady_clock::time_point end = steady_clock::now();
+
+        std::cout << "Decrypt Time = " << duration_cast<microseconds>(end - begin).count() << "[µs]" << std::endl;
     }
 }

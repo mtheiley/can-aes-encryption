@@ -17,7 +17,7 @@ namespace matrix {
         std::array<T, M>::iterator begin();
         std::array<T, M>::iterator end();
         
-        T& operator[](size_t i);
+        inline T& operator[](size_t i);
 
     private:
         std::array<T, M> cells;

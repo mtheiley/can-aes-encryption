@@ -93,11 +93,36 @@ namespace matrix {
 
     template<typename M>
     Slice<M>::Slice(M& matRef, Point start, Point end, Point inc) :
-        matRef(matRef), start(start), end_(end), inc(inc) {}
+        matRef(matRef), start(start), end_(end), inc(inc) {
+            
+        size_ = init_size_calculation();
+    }
 
     template<typename M>
     Slice<M>::Slice(Slice<M>& other) :
-        matRef(other.matRef), start(other.start), end_(other.end_), inc(other.inc) {}
+        matRef(other.matRef), start(other.start), end_(other.end_), inc(other.inc) {
+        
+        size_ = init_size_calculation();
+    }
+
+    template<typename M>
+    size_t Slice<M>::init_size_calculation() {
+        size_t size_first = 0;
+        size_t size_second = 0; 
+        
+        if(inc.first != 0)
+            size_first = (end_.first - start.first) / inc.first;
+        if(inc.second != 0)
+            size_second = (end_.second - start.second) / inc.second;
+
+        if(size_first != 0 && size_second != 0) {
+            return std::min(size_first, size_second);
+        }
+        if(size_first != 0) {
+            return size_first;
+        }
+        return size_second;
+    }
 
     template<typename M>
     Slice<M>& Slice<M>::operator=(Slice<M>& other) {
@@ -152,9 +177,10 @@ namespace matrix {
 
     template<typename M>
     auto& Slice<M>::operator[](size_t index) {
-        //auto offset = incFunc(start, index);
-        auto it = begin() + index;
-        return *it;
+        auto offset = start;
+        offset.first += inc.first * index;
+        offset.second += inc.second * index;
+        return matRef[offset.first][offset.second];
     }
 
     template<typename M>
@@ -177,12 +203,6 @@ namespace matrix {
 
     template<typename M>
     size_t Slice<M>::size() {
-        if(size_cached) return this->size_;
-        
-        size_t size_ = 0;
-        for(auto _ : *this) ++size_;
-        this->size_ = size_;
-        size_cached = true;
         return size_;
     }
 
