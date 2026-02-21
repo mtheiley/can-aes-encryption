@@ -1,0 +1,56 @@
+{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "base",
+      "hidden": true,
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "YES"
+      }
+    },
+    {
+      "name": "debug",
+      "displayName": "Debug Mode",
+      "description": "No optimizations, full debug symbols",
+      "inherits": "base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "release",
+      "displayName": "Release Mode",
+      "description": "High optimization (O3), no debug symbols",
+      "inherits": "base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_CXX_FLAGS": "-O3 -mcpu=apple-m1",
+        "CMAKE_C_FLAGS": "-O3 -mcpu=apple-m1"
+      }
+    },
+    {
+      "name": "profile",
+      "displayName": "Profile Mode",
+      "description": "Optimized (O2) with debug symbols and frame pointers for Flamegraphs",
+      "inherits": "base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+        "CMAKE_C_FLAGS": "-fno-omit-frame-pointer",
+        "CMAKE_CXX_FLAGS": "-fno-omit-frame-pointer"
+      }
+    },
+    {
+      "name": "asan",
+      "displayName": "Sanitizer Mode",
+      "description": "Debug symbols + Address Sanitizer",
+      "inherits": "debug",
+      "cacheVariables": {
+        "CMAKE_C_FLAGS": "-fsanitize=address",
+        "CMAKE_CXX_FLAGS": "-fsanitize=address",
+        "CMAKE_EXE_LINKER_FLAGS": "-fsanitize=address"
+      }
+    }
+  ]
+}
