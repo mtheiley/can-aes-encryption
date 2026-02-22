@@ -43,26 +43,28 @@ inline uint64_t __rdtscp() {
 #include <mach/thread_policy.h>
 #include <pthread.h>
 
-class BenchShield {
+// This Is The Closest That You Can Get to Core Isolation on MacOS
+class ScopedCoreIsolateMacOSHardware {
 public:
-    BenchShield() {
-        // 1. High-level Quality of Service
+    ScopedCoreIsolateMacOSHardware() {
+        // High-level Quality of Service
         pthread_set_qos_class_self_np(QOS_CLASS_USER_INTERACTIVE, 0);
 
-        // 2. Disable "Fair Share" (No timeslicing)
+        // Disable "Fair Share" No Time Slicing
         thread_extended_policy_data_t extended_policy = { .timeshare = 0 };
         thread_policy_set(mach_thread_self(), THREAD_EXTENDED_POLICY, 
                           (thread_policy_t)&extended_policy, THREAD_EXTENDED_POLICY_COUNT);
 
-        // 3. AFFINITY: This is the "glue" that keeps you on one core cluster
+        // Set Schedule Affinity for High Performance Cores
         thread_affinity_policy_data_t affinity_policy = { 1 }; // Tag '1' for P-cores
         thread_policy_set(mach_thread_self(), THREAD_AFFINITY_POLICY, 
                           (thread_policy_t)&affinity_policy, THREAD_AFFINITY_POLICY_COUNT);
 
-        // 4. Real-Time Constraints (The heavy hitter)
+        // Asking for High Performance Cores Without Being Interrupted
+        // With the Following Constraints
         thread_time_constraint_policy_data_t policy;
         policy.period = 100000;      
-        policy.computation = 95000; // Ask for 95% to avoid the "hogging" penalty
+        policy.computation = 95000;
         policy.constraint = 95000;    
         policy.preemptible = FALSE;   
 
@@ -70,11 +72,11 @@ public:
                           (thread_policy_t)&policy, THREAD_TIME_CONSTRAINT_POLICY_COUNT);
     }
 
-    ~BenchShield() {
-        // Return to default behavior to avoid starving the OS
+    ~ScopedCoreIsolateMacOSHardware() {
+        // Return to Default Behavior to Avoid Starving the OS
         pthread_set_qos_class_self_np(QOS_CLASS_DEFAULT, 0);
         
-        // Clearing Mach constraints (revert to standard throughput)
+        // Clearing Mach Constraints
         thread_standard_policy_data_t policy = {0};
         thread_policy_set(mach_thread_self(), 
                           THREAD_STANDARD_POLICY, 
@@ -84,12 +86,9 @@ public:
 };
 
 uint8_t randomChar() {
-    // 'static' ensures these are initialized only once for the life of the program
     static std::random_device rd;
     static std::mt19937 gen(rd());
     
-    // Limits range to printable ASCII characters (Space to '~')
-    // Use (0, 255) if you want the full range of a uint8_t
     static std::uniform_int_distribution<int> dist(32, 126);
 
     return static_cast<uint8_t>(dist(gen));
@@ -116,7 +115,6 @@ bool checkEqual(matrix::Matrix<uint8_t, 4, 4>& m1, matrix::Matrix<uint8_t, 4, 4>
 void writeJournal(const std::vector<short>& journal) {
     std::ofstream outFile("journal.csv");
 
-    // Optional: Check if the file was opened successfully
     if (!outFile.is_open()) {
         std::cerr << "Error: Unable to open file for writing." << std::endl;
         return;
@@ -129,7 +127,6 @@ void writeJournal(const std::vector<short>& journal) {
         }
     }
 
-    // 3. Close the file
     outFile.close();
 
     std::cout << "Data written to journal.csv successfully." << std::endl;
@@ -145,25 +142,21 @@ int main() {
 
     AES128 aes128(key);
 
-    // //Ensure that matricies are equal
-    // uint32_t testSamples = 100;
-    // for(int i = 0; i < testSamples; ++i) {
-    //     matrix::Matrix<uint8_t, 4, 4> data{genRandom()};
-    //     matrix::Matrix<uint8_t, 4, 4> fullCycle{data};
-    //     //std::cout << data << std::endl;
-    //     aes128.encrypt(fullCycle);
-    //     //std::cout << data << std::endl;
-    //     aes128.decrypt(fullCycle);
-    //     //std::cout << data << std::endl;
-    //     if(!checkEqual(data, fullCycle)) {
-    //         std::cout << "ERROR: mismatch in starting data and full encrypt/decrypt cycle" << std::endl; 
-    //         std::cout << data << std::endl;
-    //         std::cout << fullCycle << std::endl;
-    //         return -1;
-    //     }
-    // }
+    //Ensure that full cycles are valid
+    uint32_t testSamples = 100;
+    for(int i = 0; i < testSamples; ++i) {
+        matrix::Matrix<uint8_t, 4, 4> data{genRandom()};
+        matrix::Matrix<uint8_t, 4, 4> fullCycle{data};
+        aes128.encrypt(fullCycle);
+        aes128.decrypt(fullCycle);
+        if(!checkEqual(data, fullCycle)) {
+            std::cout << "ERROR: mismatch in starting data and full encrypt/decrypt cycle" << std::endl; 
+            std::cout << data << std::endl;
+            std::cout << fullCycle << std::endl;
+            return -1;
+        }
+    }
 
-    //Benchmarks
     const auto startTime = __rdtscp();
     uint64_t totalTime = startTime;
     TickConverter converter;
@@ -174,7 +167,8 @@ int main() {
     std::array<matrix::Matrix<uint8_t, 4, 4>, 1024> data_pool;
     for(int i = 0; i < 1024; ++i) data_pool[i] = genRandom();
 
-    BenchShield benchShield;
+    //Isolate Process
+    ScopedCoreIsolateMacOSHardware scopedCoreIsolate;
 
     //Warm up the cache and branch predictor
     for(int i = 0; i < samples/10; ++i) {
@@ -201,8 +195,6 @@ int main() {
 
     std::cout << "Per Encrypt/Decrypt Cycle Cost | " << "Ticks: " << timeDelta << " Freq: " << converter.frequency << " Nanos: " << converter.ticks_to_ns(timeDelta) << std::endl;
 
-    // ... after the loop ...
-
     std::sort(journal.begin(), journal.end());
 
     double minVal = journal.front();
@@ -218,11 +210,8 @@ int main() {
     std::cout << "P99.9:  " << p999   << " ns\n";
     std::cout << "Max:    " << maxVal << " ns\n";
 
-    // 1. Define the "Interrupt Threshold" 
-    // (Anything 50% slower than the median is likely an interrupt)
+ 
     const double threshold = median * 1.5; 
-
-    // 2. Count how many samples exceeded this threshold
     long long interrupt_count = 0;
     for (short sample : journal) {
         if (sample > threshold) {
@@ -230,7 +219,6 @@ int main() {
         }
     }
 
-    // 3. Calculate Empirical Probability
     double probability = (double)interrupt_count / samples;
 
     std::cout << "\n--- INTERRUPT ANALYSIS ---\n";
