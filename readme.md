@@ -20,6 +20,13 @@ Since this was benchmarked on MacOS effort has been taken to isolate process on 
 * P99 of 416ns
 * P99.9 of 485ns
 
+## Start Profile
+![Start Profile](start_profile.jpg)
+## Process Isolation
+![Process Isolation](isolate.jpg)
+## Cache + Branch Predictor Warmup
+![Warm Up](warmup.jpg)
+
 # Running
 `./aes_main`
 
